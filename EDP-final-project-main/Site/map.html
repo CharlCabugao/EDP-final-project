@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <title>NBSC Guide Map</title>
+
+    <style>
+      #map {
+        height: 550px;
+        width: 100%;
+        margin-top: 20px;
+      }
+      .applet-container {
+        margin: 20px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="index.html">Home</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Applets
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" href="/leaflet-map/index.html"
+                    >Leaflet Map</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+            </li>
+          </ul>
+          <form class="d-flex" role="search" id="searchForm">
+            <input
+              class="form-control me-2"
+              type="search"
+              placeholder="Search"
+              aria-label="Search"
+              id="searchInput"
+            />
+            <button class="btn btn-outline-success" type="submit">
+              Search
+            </button>
+          </form>
+        </div>
+      </div>
+    </nav>
+
+    <div class="applet-container">
+      <h3>Leaflet Map Basics</h3>
+      <div id="map"></div>
+    </div>
+
+    <script>
+      class LeafletMap {
+        constructor(containerId, center, zoom) {
+          this.map = L.map(containerId).setView(center, zoom);
+          this.initTileLayer();
+          this.markers = [];
+        }
+
+        initTileLayer() {
+          L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            maxZoom: 19,
+            attribution:
+              '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+          }).addTo(this.map);
+        }
+
+        addMarker(lat, lng, message) {
+          const marker = L.marker([lat, lng]).addTo(this.map);
+          marker.bindPopup(message);
+          marker.bindTooltip(message, { permanent: false, offset: [0, -15] });
+          this.markers.push({ marker, message });
+        }
+
+        loadMarkersFromJson(url) {
+          fetch(url)
+            .then((response) => response.json())
+            .then((data) => {
+              data.forEach((marker) => {
+                this.addMarker(
+                  marker.latitude,
+                  marker.longitude,
+                  marker.message
+                );
+              });
+            })
+            .catch((error) => console.error("Error loading markers:", error));
+        }
+
+        searchMarkers(query) {
+          this.markers.forEach(({ marker, message }) => {
+            if (message.toLowerCase().includes(query.toLowerCase())) {
+              marker.openPopup();
+              this.map.setView(marker.getLatLng(), 18);
+            }
+          });
+        }
+
+        addLegend() {
+          const legend = L.control({ position: "bottomright" });
+
+          legend.onAdd = function () {
+            const div = L.DomUtil.create("div", "info legend");
+            div.innerHTML = `
+                        <h4>Legend</h4>
+                        <p>Markers: Points of Interest</p>
+                    `;
+            return div;
+          };
+
+          legend.addTo(this.map);
+        }
+      }
+
+      const myMap = new LeafletMap("map", [8.360004, 124.868419], 18);
+
+      const points = [
+        { lat: 8.359735, lng: 124.869206, message: "CCS Faculty Office" },
+        { lat: 8.359639, lng: 124.869179, message: "CCS Laboratory 1" },
+        { lat: 8.359554, lng: 124.869153, message: "CCS Laboratory 2" },
+        {
+          lat: 8.360395612305323,
+          lng: 124.86752585123908,
+          message: "Northern Bukidnon State College",
+        },
+        { lat: 8.3600767907373, lng: 124.86888696127201, message: "NBSC Gym" },
+        {
+          lat: 8.361122898385352,
+          lng: 124.8673706485873,
+          message: "NBSC Guard House/Gate",
+        },
+        {
+          lat: 8.360773955983829,
+          lng: 124.86943073728327,
+          message: "NBSC Billing Office",
+        },
+        {
+          lat: 8.360463527526761,
+          lng: 124.86942861035917,
+          message: "NBSC CR near Billing building",
+        },
+        {
+          lat: 8.359915775043655,
+          lng: 124.869224670904,
+          message: "Room 101 Former NSTP office",
+        },
+        {
+          lat: 8.359849117624751,
+          lng: 124.86920653193609,
+          message: "TEP Department",
+        },
+        { lat: 8.35994568541826, lng: 124.8692272621835, message: "NBSC AVR" },
+        {
+          lat: 8.359336367868586,
+          lng: 124.86882474988727,
+          message: "NBSC Supply Office",
+        },
+        {
+          lat: 8.35903873939351,
+          lng: 124.8690252124111,
+          message: "GEC Department",
+        },
+        {
+          lat: 8.359092252920188,
+          lng: 124.86856582384297,
+          message: "NBSC BSBA building",
+        },
+        {
+          lat: 8.359176447522465,
+          lng: 124.86827879614376,
+          message: "NBSC Clinic",
+        },
+        {
+          lat: 8.359203561033732,
+          lng: 124.8681799951472,
+          message: "NBSC tapad clinic",
+        },
+        {
+          lat: 8.359189290764592,
+          lng: 124.86905982881818,
+          message: "NBSC Registrar Office",
+        },
+        {
+          lat: 8.360331467888589,
+          lng: 124.86932443232084,
+          message: "TEP Room 10",
+        },
+        {
+          lat: 8.359273115343441,
+          lng: 124.86804632354932,
+          message: "NBSC Reports",
+        },
+        {
+          lat: 8.35918355252063,
+          lng: 124.86790953088583,
+          message: "NBSC TASAO",
+        },
+        {
+          lat: 8.359237290216786,
+          lng: 124.86776670325185,
+          message: "NBSC Library",
+        },
+        { lat: 8.359287710764477, lng: 124.86764868605196, message: "NBSC HR" },
+        {
+          lat: 8.36026606103044,
+          lng: 124.86750996902872,
+          message: "NBSC STUDENT CENTER building",
+        },
+        {
+          lat: 8.359908159217403,
+          lng: 124.86741802026536,
+          message: "NBSC NSTP",
+        },
+        {
+          lat: 8.360317531832731,
+          lng: 124.86752932666312,
+          message: "NBSC IGP",
+        },
+        {
+          lat: 8.360753237897654,
+          lng: 124.86939975804357,
+          message: "NBSC IMO",
+        },
+        {
+          lat: 8.36071493408825,
+          lng: 124.86938765952208,
+          message: "NBSC CASHIER",
+        },
+      ];
+
+      points.forEach((point) =>
+        myMap.addMarker(point.lat, point.lng, point.message)
+      );
+
+      myMap.addLegend();
+
+      document
+        .getElementById("searchForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          const searchQuery = document.getElementById("searchInput").value;
+          myMap.searchMarkers(searchQuery);
+        });
+    </script>
+  </body>
+</html>

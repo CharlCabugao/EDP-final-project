@@ -24,34 +24,32 @@
         width: 100%;
         margin-top: 20px;
         border: solid black;
-        animation: slideInLeft 1s ease-out; /* Add slide-in animation */
+        animation: slideInLeft 1s ease-out; 
       }
     
-      /* Slide-in from the left */
       @keyframes slideInLeft {
         0% {
-          transform: translateX(-100%); /* Start off-screen to the left */
+          transform: translateX(-100%); 
           opacity: 0;
         }
         100% {
-          transform: translateX(0); /* End at the normal position */
+          transform: translateX(0); 
           opacity: 1;
         }
       }
     
       .applet-container {
         margin: 20px;
-        animation: slideInRight 1s ease-out; /* Add slide-in animation */
+        animation: slideInRight 1s ease-out;
       }
     
-      /* Slide-in from the right */
       @keyframes slideInRight {
         0% {
-          transform: translateX(100%); /* Start off-screen to the right */
+          transform: translateX(100%);
           opacity: 0;
         }
         100% {
-          transform: translateX(0); /* End at the normal position */
+          transform: translateX(0); 
           opacity: 1;
         }
       }    
@@ -80,7 +78,6 @@
         color: #b09a1c; 
       }
     
-      /* Footer Styles */
       footer {
         background-color: #042444;
         color: white;
@@ -203,13 +200,12 @@
       </div>
     </div>
 
-    <!-- Footer -->
     <footer>
       <p>&copy; 2024 NBSC Guide Map | <a href="https://www.nbsc.edu.ph">Visit NBSC</a></p>
     </footer> 
 
     <script>
-       // Encapsulation//
+    
       class LeafletMap {
         constructor(containerId, center, zoom) {
           this.map = L.map(containerId).setView(center, zoom);
@@ -434,12 +430,6 @@ const points = [
     details: "This is the main faculty office for the Library Office.",
   },
   {
-    lat: 8.359287710764477,
-    lng: 124.86764868605196,
-    message: "NBSC HR",
-    
-  },
-  {
     lat: 8.36026606103044,
     lng: 124.86750996902872,
     message: "NBSC STUDENT CENTER building",
@@ -481,13 +471,6 @@ const points = [
     imageUrl: "assets/images/casher.jpeg",
     details: "This is the main faculty office for the CASHER department.",
   },
-  {
-    lat:8.38077517624774,
-    lng: 124.82330559213082,
-    message: "balay",
-    imageUrl: "assets/images/balay.jpeg",
-    details: "This is the main faculty office for the balay department.",
-  }
 ];
 
 points.forEach((point) =>

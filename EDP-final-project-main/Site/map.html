@@ -23,17 +23,120 @@
         height: 550px;
         width: 100%;
         margin-top: 20px;
+        border: solid black;
+        animation: slideInLeft 1s ease-out; /* Add slide-in animation */
       }
+    
+      /* Slide-in from the left */
+      @keyframes slideInLeft {
+        0% {
+          transform: translateX(-100%); /* Start off-screen to the left */
+          opacity: 0;
+        }
+        100% {
+          transform: translateX(0); /* End at the normal position */
+          opacity: 1;
+        }
+      }
+    
       .applet-container {
         margin: 20px;
+        animation: slideInRight 1s ease-out; /* Add slide-in animation */
+      }
+    
+      /* Slide-in from the right */
+      @keyframes slideInRight {
+        0% {
+          transform: translateX(100%); /* Start off-screen to the right */
+          opacity: 0;
+        }
+        100% {
+          transform: translateX(0); /* End at the normal position */
+          opacity: 1;
+        }
+      }    
+      .custom-navbar {
+        background: linear-gradient(45deg, #070707, #75dfff, #042444);
+        color: white;
+      }
+      .custom-navbar .navbar-brand,
+      .custom-navbar .nav-link {
+        color: white;
+        transition: color .10s ease;
+        text-decoration: none; 
+      }
+      .custom-navbar .navbar-brand:hover,
+      .custom-navbar .nav-link:hover {
+        color: #10f363; 
+        text-decoration: underline;  
+      }
+      .custom-navbar .btn-outline-success {
+        border-color: white;
+        color: white;
+        transition: all 0.3s ease;
+      }
+      .custom-navbar .btn-outline-success:hover {
+        background-color: white;
+        color: #b09a1c; 
+      }
+    
+      /* Footer Styles */
+      footer {
+        background-color: #042444;
+        color: white;
+        padding: 20px 0;
+        text-align: center;
+        position: relative;
+        bottom: 0;
+        width: 100%;
+      }
+      footer a {
+        color: #75dfff;
+        text-decoration: none;
+      }
+      footer a:hover {
+        text-decoration: underline;
+      }
+      footer {
+        background: linear-gradient(45deg, #042444, #75dfff);
+        color: white;
+        padding: 40px 0;
+        text-align: center;
+        position: relative;
+        bottom: 0;
+        width: 100%;
+      }
+    
+      footer .footer-text {
+        font-size: 18px;
+        margin: 10px 0;
+      }
+    
+      footer a {
+        color: #ff9f00;
+        text-decoration: none;
+        font-weight: bold;
+      }
+    
+      footer a:hover {
+        text-decoration: underline;
+        color: #042444;
+      }
+    
+      @media (max-width: 768px) {
+        footer .footer-text {
+          font-size: 16px;
+        }
       }
     </style>
+    
   </head>
 
   <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="navbar navbar-expand-lg custom-navbar">
       <div class="container-fluid">
-        <a class="navbar-brand" href="index.html">Home</a>
+        <a class="navbar-brand" href="index.html">Home</a> 
+        <a class="navbar-brand" href="about.html">About Us</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -45,31 +148,9 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
+        
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Applets
-              </a>
-              <ul class="dropdown-menu">
-                <li>
-                  <a class="dropdown-item" href="/leaflet-map/index.html"
-                    >Leaflet Map</a
-                  >
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-            </li>
-          </ul>
-          <form class="d-flex" role="search" id="searchForm">
+          <form class="d-flex ms-auto" role="search" id="searchForm">
             <input
               class="form-control me-2"
               type="search"
@@ -84,13 +165,51 @@
         </div>
       </div>
     </nav>
+    
 
     <div class="applet-container">
-      <h3>Leaflet Map Basics</h3>
+      <h3>NBSC GUIDE MAP</h3>
       <div id="map"></div>
     </div>
 
+    <div
+      class="modal fade"
+      id="markerModal"
+      tabindex="-1"
+      aria-labelledby="markerModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-m">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="markerModalLabel">Marker Details</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <img
+              id="modalImage"
+              src=""
+              alt="Location Image"
+              class="img-fluid mb-3"
+            />
+            <p id="modalDetails"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2024 NBSC Guide Map | <a href="https://www.nbsc.edu.ph">Visit NBSC</a></p>
+    </footer> 
+
     <script>
+       // Encapsulation//
       class LeafletMap {
         constructor(containerId, center, zoom) {
           this.map = L.map(containerId).setView(center, zoom);
@@ -106,10 +225,21 @@
           }).addTo(this.map);
         }
 
-        addMarker(lat, lng, message) {
+        addMarker(lat, lng, message, imageUrl, details) {
           const marker = L.marker([lat, lng]).addTo(this.map);
           marker.bindPopup(message);
-          marker.bindTooltip(message, { permanent: false, offset: [0, -15] });
+
+          marker.on("click", () => {
+            document.getElementById("markerModalLabel").innerText = message;
+            document.getElementById("modalImage").src = imageUrl;
+            document.getElementById("modalDetails").innerText = details;
+
+            const modal = new bootstrap.Modal(
+              document.getElementById("markerModal")
+            );
+            modal.show();
+          });
+
           this.markers.push({ marker, message });
         }
 
@@ -155,133 +285,230 @@
 
       const myMap = new LeafletMap("map", [8.360004, 124.868419], 18);
 
-      const points = [
-        { lat: 8.359735, lng: 124.869206, message: "CCS Faculty Office" },
-        { lat: 8.359639, lng: 124.869179, message: "CCS Laboratory 1" },
-        { lat: 8.359554, lng: 124.869153, message: "CCS Laboratory 2" },
-        {
-          lat: 8.360395612305323,
-          lng: 124.86752585123908,
-          message: "Northern Bukidnon State College",
-        },
-        { lat: 8.3600767907373, lng: 124.86888696127201, message: "NBSC Gym" },
-        {
-          lat: 8.361122898385352,
-          lng: 124.8673706485873,
-          message: "NBSC Guard House/Gate",
-        },
-        {
-          lat: 8.360773955983829,
-          lng: 124.86943073728327,
-          message: "NBSC Billing Office",
-        },
-        {
-          lat: 8.360463527526761,
-          lng: 124.86942861035917,
-          message: "NBSC CR near Billing building",
-        },
-        {
-          lat: 8.359915775043655,
-          lng: 124.869224670904,
-          message: "Room 101 Former NSTP office",
-        },
-        {
-          lat: 8.359849117624751,
-          lng: 124.86920653193609,
-          message: "TEP Department",
-        },
-        { lat: 8.35994568541826, lng: 124.8692272621835, message: "NBSC AVR" },
-        {
-          lat: 8.359336367868586,
-          lng: 124.86882474988727,
-          message: "NBSC Supply Office",
-        },
-        {
-          lat: 8.35903873939351,
-          lng: 124.8690252124111,
-          message: "GEC Department",
-        },
-        {
-          lat: 8.359092252920188,
-          lng: 124.86856582384297,
-          message: "NBSC BSBA building",
-        },
-        {
-          lat: 8.359176447522465,
-          lng: 124.86827879614376,
-          message: "NBSC Clinic",
-        },
-        {
-          lat: 8.359203561033732,
-          lng: 124.8681799951472,
-          message: "NBSC tapad clinic",
-        },
-        {
-          lat: 8.359189290764592,
-          lng: 124.86905982881818,
-          message: "NBSC Registrar Office",
-        },
-        {
-          lat: 8.360331467888589,
-          lng: 124.86932443232084,
-          message: "TEP Room 10",
-        },
-        {
-          lat: 8.359273115343441,
-          lng: 124.86804632354932,
-          message: "NBSC Reports",
-        },
-        {
-          lat: 8.35918355252063,
-          lng: 124.86790953088583,
-          message: "NBSC TASAO",
-        },
-        {
-          lat: 8.359237290216786,
-          lng: 124.86776670325185,
-          message: "NBSC Library",
-        },
-        { lat: 8.359287710764477, lng: 124.86764868605196, message: "NBSC HR" },
-        {
-          lat: 8.36026606103044,
-          lng: 124.86750996902872,
-          message: "NBSC STUDENT CENTER building",
-        },
-        {
-          lat: 8.359908159217403,
-          lng: 124.86741802026536,
-          message: "NBSC NSTP",
-        },
-        {
-          lat: 8.360317531832731,
-          lng: 124.86752932666312,
-          message: "NBSC IGP",
-        },
-        {
-          lat: 8.360753237897654,
-          lng: 124.86939975804357,
-          message: "NBSC IMO",
-        },
-        {
-          lat: 8.36071493408825,
-          lng: 124.86938765952208,
-          message: "NBSC CASHIER",
-        },
-      ];
+const points = [
+  {
+    lat: 8.359735,
+    lng: 124.869206,
+    message: "CCS Faculty Office",
+    imageUrl: "assets/images/ccs_department.jpeg",
+    details: "This is the main faculty office for the CCS department.",
+  },
+  {
+    lat: 8.359639,
+    lng: 124.869179,
+    message: "CCS Laboratory 1",
+    imageUrl: "assets/images/laboratory1.jpeg",
+    details: "This is the main laboratory 1 for the CCS department.",
+  },
+  {
+    lat: 8.359554,
+    lng: 124.869153,
+    message: "CCS Laboratory 2",
+    imageUrl: "assets/images/laboratory.jpeg",
+    details: "This is the laboratory 2 for the CCS department.",
+  },
+  {
+    lat: 8.360395612305323,
+    lng: 124.86752585123908,
+    message: "SAS",
+    imageUrl: "assets/images/SAS.jpeg",
+    details: "This is the Northern Bukidnon State College SAS buildung.",
+  },
+  {
+    lat: 8.3600767907373,
+    lng: 124.86888696127201,
+    message: "NBSC Gym",
+    imageUrl: "assets/images/GYM.jpeg",
+    details: "This is the main faculty office for the CCS department.",
+  },
+  {
+    lat: 8.361122898385352,
+    lng: 124.8673706485873,
+    message: "NBSC Guard House/Gate",
+    imageUrl: "assets/images/Guard_House.jpeg",
+    details: "This is the main faculty office for the Guard_House department.",
+  },
+  {
+    lat: 8.360773955983829,
+    lng: 124.86943073728327,
+    message: "NBSC Billing Office",
+    imageUrl: "assets/images/billing.jpeg",
+    details: "This is the main faculty office for the Billing department.",
+  },
+  {
+    lat: 8.360463527526761,
+    lng: 124.86942861035917,
+    message: "NBSC CR near ",
+    imageUrl: "assets/images/Cr.jpeg",
+    details: "This is the CR.",
+  },
+  {
+    lat: 8.359915775043655,
+    lng: 124.869224670904,
+    message: "Room 101 Former NSTP office",
+    imageUrl: "assets/images/ROTC_HQ.jpeg",
+    details: "This is the main faculty office for the ROTC department.",
+  },
+  {
+    lat: 8.359849117624751,
+    lng: 124.86920653193609,
+    message: "TEP Department",
+    imageUrl: "assets/images/tep.jpeg",
+    details: "This is the main faculty office for the TEP department.",
+  },
+  {
+    lat: 8.35994568541826,
+    lng: 124.8692272621835,
+    message: "NBSC AVR",
+    imageUrl: "assets/images/AVR.jpeg",
+    details: "This is the main faculty office for the AVR department.",
+  },
+  {
+    lat: 8.359336367868586,
+    lng: 124.86882474988727,
+    message: "NBSC Supply Office",
+    imageUrl: "assets/images/supply.jpeg",
+    details: "This is the main faculty office for the Supply department.",
+  },
+  {
+    lat: 8.35903873939351,
+    lng: 124.8690252124111,
+    message: "GEC Department",
+    imageUrl: "assets/images/GEC.jpeg",
+    details: "This is the main faculty office for the GEC department.",
+  },
+  {
+    lat: 8.359092252920188,
+    lng: 124.86856582384297,
+    message: "NBSC BSBA building",
+    imageUrl: "assets/images/BSBA.jpeg",
+    details: "This is the main for the BSBA Building.",
+  },
+  {
+    lat: 8.359176447522465,
+    lng: 124.86827879614376,
+    message: "NBSC Clinic",
+    imageUrl: "assets/images/clinic.jpeg",
+    details: "This is the main faculty office for the clinic department.",
+  },
+  {
+    lat: 8.359203561033732,
+    lng: 124.8681799951472,
+    message: "NBSC clinic Office",
+    imageUrl: "assets/images/clinic.jpeg",
+    details: "This is the main faculty office for the clinic Office.",
+  },
+  {
+    lat: 8.359189290764592,
+    lng: 124.86905982881818,
+    message: "NBSC Registrar Office",
+    imageUrl: "assets/images/Registrar.jpeg",
+    details: "This is the main faculty office for the Registrar Office.",
+  },
+  {
+    lat: 8.360331467888589,
+    lng: 124.86932443232084,
+    message: "TEP Room 110",
+    imageUrl: "assets/images/tep_room_110.jpeg",
+    details: "This is the main faculty office for the TEP ROOM 110 Office.",
+  },
+  {
+    lat: 8.359273115343441,
+    lng: 124.86804632354932,
+    message: "NBSC Reports",
+    imageUrl: "assets/images/nbsc_reports.jpeg",
+    details: "This is the main faculty office for the NBSC_REPORTS Office.",
+  },
+  {
+    lat: 8.35918355252063,
+    lng: 124.86790953088583,
+    message: "NBSC TASAO",
+    imageUrl: "assets/images/TASAO.jpeg",
+    details: "This is the main faculty office for the TASAO Office.",
+  },
+  {
+    lat: 8.359237290216786,
+    lng: 124.86776670325185,
+    message: "NBSC Library",
+    imageUrl: "assets/images/library.jpeg",
+    details: "This is the main faculty office for the Library Office.",
+  },
+  {
+    lat: 8.359287710764477,
+    lng: 124.86764868605196,
+    message: "NBSC HR",
+    
+  },
+  {
+    lat: 8.36026606103044,
+    lng: 124.86750996902872,
+    message: "NBSC STUDENT CENTER building",
+    imageUrl: "assets/images/NBSC_BUILDING.jpeg",
+    details: "This is the NBSC STUDENT CENTER building department.",
+  },
+  {
+    lat: 8.359908159217403,
+    lng: 124.86741802026536,
+    message: "NBSC NSTP",
+    imageUrl: "assets/images/NSTP_Office.jpeg",
+    details: "This is the main faculty office for the NSTP_OFFICE department.",
+  },
+  {
+    lat: 8.360099817735684,
+    lng: 124.86928882605376,
+    message: "NBSC ROTC_DEPARTMENT",
+    imageUrl: "assets/images/ROTC_HQ.jpeg",
+    details: "This is the main faculty office for the ROTC department.",
+  },
+  {
+    lat: 8.360317531832731,
+    lng: 124.86752932666312,
+    message: "NBSC IGP",
+    imageUrl: "assets/images/IGP.jpeg",
+    details: "This is the main faculty office for the IGP department.",
+  },
+  {
+    lat: 8.360753237897654,
+    lng: 124.86939975804357,
+    message: "NBSC IMO",
+    imageUrl: "assets/images/imo.jpeg",
+    details: "This is the main faculty office for the IMO department.",
+  },
+  {
+    lat: 8.36071493408825,
+    lng: 124.86938765952208,
+    message: "NBSC CASHIER",
+    imageUrl: "assets/images/casher.jpeg",
+    details: "This is the main faculty office for the CASHER department.",
+  },
+  {
+    lat:8.38077517624774,
+    lng: 124.82330559213082,
+    message: "balay",
+    imageUrl: "assets/images/balay.jpeg",
+    details: "This is the main faculty office for the balay department.",
+  }
+];
 
-      points.forEach((point) =>
-        myMap.addMarker(point.lat, point.lng, point.message)
-      );
+points.forEach((point) =>
+  myMap.addMarker(
+    point.lat,
+    point.lng,
+    point.message,
+    point.imageUrl,
+    point.details
+  )
+);
 
-      myMap.addLegend();
+myMap.addLegend();
 
-      document
-        .getElementById("searchForm")
-        .addEventListener("submit", function (event) {
-          event.preventDefault();
-          const searchQuery = document.getElementById("searchInput").value;
-          myMap.searchMarkers(searchQuery);
-        });
-    </script>
-  </body>
+document
+  .getElementById("searchForm")
+  .addEventListener("submit", function (event) {
+    event.preventDefault();
+    const searchQuery = document.getElementById("searchInput").value;
+    myMap.searchMarkers(searchQuery);
+  });
+</script>
+</body>
 </html>

@@ -14,63 +14,174 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #042444; 
-            padding: 0;
+            background: linear-gradient(135deg, #009cde, #080808);
+            color: #ffffff;
             margin: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            overflow: hidden;
+            transition: background 0.5s ease-in-out;
+            position: relative;
+        }
+
+        .parallax {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('assets/images/nbsc_bg_parallax.jpg');
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
         }
 
         .landing-container {
             text-align: center;
-            max-width: 600px;
-            margin: 20px;
-            padding: 20px;
-            background-color: rgba(32, 10, 105, 0.8); 
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 700px;
+            padding: 40px 30px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 20px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3), 0 0 40px rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            animation: fadeIn 1.8s ease-out, slideInFromTop 1.2s ease-out;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-40px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInFromTop {
+            0% {
+                transform: translateY(-40px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         .landing-container h1 {
-            color: #2c3e50;
-            margin-top: 20px;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            letter-spacing: 3px;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.6), 0 0 30px rgba(0, 255, 255, 0.8);
+            animation: slideInLeft 1s ease-out;
         }
 
         .landing-container p {
-            font-size: 18px;
-            color: #34495e;
-        }
-
-        .landing-container img {
-            max-width: 200px;  
-            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: 300;
+            margin-bottom: 30px;
+            color: #e2e6ea;
+            line-height: 1.8;
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: 1px;
+            animation: slideInLeft 1.5s ease-out;
         }
 
         .btn-custom {
-            background-color: #27ae60;
-            color: white;
+            background-color: #004080;
+            color: #fff;
             font-size: 18px;
-            padding: 12px 30px;
-            border-radius: 25px;
+            padding: 15px 40px;
+            border-radius: 40px;
             text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease, transform 0.3s ease;
+        }
+
+        .btn-custom:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background-color: #75dfff;
+            transition: all 0.3s ease;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.6;
+            pointer-events: none;
         }
 
         .btn-custom:hover {
-            background-color: #2ecc71;
+            background-color: #e4ae2e;
+            color: #0e0f10;
+            transform: translateY(-6px);
+        }
+
+        .btn-custom:active {
+            transform: translateY(2px);
+        }
+
+        .landing-container img {
+            max-width: 250px;
+            margin-bottom: 20px;
+            border-radius: 50%;
+            border: 5px solid #ffffff;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.4), 0 0 20px rgba(40, 69, 97, 0.8);
+            animation: zoomIn 1.5s ease-out;
+        }
+
+        @keyframes zoomIn {
+            0% {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 20px;
+            }
+
+            .landing-container {
+                padding: 30px;
+            }
+
+            .landing-container h1 {
+                font-size: 2.5rem;
+            }
+
+            .landing-container p {
+                font-size: 18px;
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <div class="landing-container">
-       
-        <img src="assets/images/nbsc bg.jpeg" alt="NBSC Logo"> 
+    <div class="parallax"></div>
 
-        <h1>Welcome to the NBSC Guide</h1>
-        <p>Your one-stop interactive map to explore the various departments and facilities at Northern Bukidnon State College.</p>
+    <div class="landing-container">
+        <img src="assets/images/NBSC_bg.jpeg" alt="NBSC ">
+        <h1>Welcome to the NBSC Guide Map</h1>
+        <p>Explore the departments and facilities at Northern Bukidnon State College with this interactive map. Your guide to a seamless campus experience.</p>
         <a href="map.html" class="btn-custom">Explore Now!</a>
     </div>
 

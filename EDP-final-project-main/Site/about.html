@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - NBSC Guide Map</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #75dfff, #042444);
+            color: white;
+            margin: 0;
+            padding: 0;
+            transition: background 0.5s ease-in-out;
+        }
+        
+
+        .navbar {
+            background-color: #042444;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .navbar-nav .nav-link {
+            color: white;
+            font-size: 18px;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #ff9f00;
+        }
+
+        .navbar-nav .nav-link.active {
+            color: #10f363;
+            font-weight: bold;
+        }
+
+        .hero-section {
+            height: 300px;
+            background: url('assets/images/hero-bg.jpg') no-repeat center center/cover;
+            color: white;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            font-size: 2rem;
+            font-weight: 700;
+            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-section h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .container {
+            padding: 60px 20px;
+            max-width: 900px;
+        }
+
+        .about-container {
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #061523;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .about-container:hover {
+            transform: scale(1.03);
+        }
+
+        .about-container h1 {
+            color: #042444;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .about-container p {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #061523;
+        }
+
+        .about-container p strong {
+            font-weight: bold;
+        }
+
+        .footer {
+            background-color: #042444;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .footer .social-icons a {
+            color: #75dfff;
+            font-size: 1.5rem;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+
+        .footer .social-icons a:hover {
+            color: #ff9f00;
+        }
+
+        .footer a {
+            color: #75dfff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: #ff9f00;
+        }
+
+        @media (max-width: 768px) {
+            .hero-section {
+                height: 200px;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            .about-container h1 {
+                font-size: 2rem;
+            }
+
+            .about-container p {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">NBSC Guide</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="map.html">Explore Map</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="about.html">About Us</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero-section">
+        <h1>Welcome to NBSC Guide</h1>
+        <p>Explore Northern Bukidnon State College with our interactive map</p>
+    </div>
+
+    <div class="container">
+        <div class="about-container">
+            <h1>About the NBSC Guide Map</h1>
+            <p>
+                The <strong>NBSC Guide Map</strong> is an interactive platform designed to help students, staff, and visitors navigate the various departments and facilities of <strong>Northern Bukidnon State College (NBSC)</strong>.
+                With this tool, you can easily locate important areas such as administrative offices, classrooms, laboratories, libraries, and recreational facilities.
+            </p>
+            <p>
+                This map aims to make your experience at NBSC more efficient and enjoyable. Whether you're new to the campus or familiar with the grounds, this guide will help you find your way quickly.
+            </p>
+            <p>
+                The NBSC Guide Map is a user-friendly tool that will save you time and energy, ensuring you never get lost and always know the best route to take.
+            </p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="social-icons">
+            <!-- Removed Instagram and Twitter links -->
+            <a href="https://facebook.com" target="_blank">Facebook</a>
+        </div>
+        <p>&copy; 2024 NBSC Guide Map. All rights reserved. <a href="#">Privacy Policy</a></p>
+    </div>
+
+</body>
+</html>
